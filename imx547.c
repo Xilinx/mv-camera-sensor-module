@@ -469,7 +469,7 @@ static int imx547_s_ctrl(struct v4l2_ctrl *ctrl)
  * Return: 0 on success
  */
 static int imx547_get_fmt(struct v4l2_subdev *sd,
-              struct v4l2_subdev_pad_config *cfg,
+              struct v4l2_subdev_state *sd_state,
               struct v4l2_subdev_format *fmt)
 {
     struct stimx547 *imx547 = to_imx547(sd);
@@ -491,7 +491,7 @@ static int imx547_get_fmt(struct v4l2_subdev *sd,
  * Return: 0 on success
  */
 static int imx547_set_fmt(struct v4l2_subdev *sd,
-              struct v4l2_subdev_pad_config *cfg,
+              struct v4l2_subdev_state *sd_state,
               struct v4l2_subdev_format *format)
 {
     struct stimx547 *imx547 = to_imx547(sd);
@@ -864,8 +864,6 @@ static int imx547_set_frame_length(struct stimx547 *priv)
 {
     int err;
     u32 frame_length_32bit;
-    u32 vmax;
-
 
     frame_length_32bit = (u32)priv->frame_length;
 
@@ -896,7 +894,8 @@ static int imx547_set_frame_interval(struct stimx547 *priv)
     u64 req_frame_rate;
     u32 max_frame_rate;
 
-    dev_dbg(&priv->client->dev, "%s: input frame interval = %d / %d", __func__, priv->frame_interval.numerator, priv->frame_interval.denominator);
+	dev_dbg(&priv->client->dev, "%s: input frame interval = %d / %d", 
+			__func__, priv->frame_interval.numerator, priv->frame_interval.denominator);
 
     if (priv->frame_interval.numerator == 0 || priv->frame_interval.denominator == 0) {
         priv->frame_interval.denominator = IMX547_DEF_FRAME_RATE;
@@ -941,7 +940,8 @@ static int imx547_set_frame_interval(struct stimx547 *priv)
 
     frame_length = (IMX547_M_FACTOR * IMX547_G_FACTOR) / (req_frame_rate * priv->line_time);
     priv->frame_length = frame_length;
-    dev_dbg(&priv->client->dev, "%s: req_frame_rate: %d line time: %d, frame_length:%llu  \n", __func__, req_frame_rate, priv->line_time, frame_length);
+    dev_dbg(&priv->client->dev, "%s: req_frame_rate: %llu line time: %d, frame_length:%llu  \n",
+			 __func__, req_frame_rate, priv->line_time, frame_length);
 
     err = imx547_set_frame_length(priv);
     if (err)
