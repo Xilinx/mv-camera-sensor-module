@@ -45,7 +45,8 @@
 #define IMX547_DEF_GAIN             (0)
 
 #define IMX547_MIN_BLACK_LEVEL          (0)
-#define IMX547_MAX_BLACK_LEVEL          (4095)
+#define IMX547_MAX_BLACK_LEVEL_10BIT    (1023)
+#define IMX547_MAX_BLACK_LEVEL_12BIT    (4095)
 #define IMX547_DEF_BLACK_LEVEL_10BIT    (60)
 #define IMX547_DEF_BLACK_LEVEL_12BIT    (240)
 
@@ -1057,8 +1058,8 @@ static int imx547_probe(struct i2c_client *client)
         &imx547->ctrls.handler,
         &imx547_ctrl_ops,
         V4L2_CID_BLACK_LEVEL, IMX547_MIN_BLACK_LEVEL,
-        IMX547_MAX_BLACK_LEVEL, 1,
-        IMX547_DEF_BLACK_LEVEL_12BIT);
+        IMX547_MAX_BLACK_LEVEL_10BIT, 1,
+        IMX547_DEF_BLACK_LEVEL_10BIT);
 
     imx547->sd.ctrl_handler = &imx547->ctrls.handler;
     if (imx547->ctrls.handler.error) {
