@@ -377,11 +377,11 @@ static int imx547_start_stream(struct stimx547 *priv)
 
     /* "Internal regulator stabilization" time */
     usleep_range(1138000, 1140000);
-#if 0
+
     gpiod_set_value_cansleep(priv->gt_trx_reset_gpio, 1);
     usleep_range(20000, 21000);
     gpiod_set_value_cansleep(priv->gt_trx_reset_gpio, 0);
-#endif
+
     err |= imx547_write_reg(priv, XMSTA, 0x00);
 
     dev_dbg(&priv->client->dev, "imx547 : imx547_start_stream !\n");
@@ -1023,6 +1023,27 @@ static int imx547_probe(struct i2c_client *client)
             "%s : media entity init Failed %d\n", __func__, ret);
         goto err_regmap;
     }
+
+    /* initialize gt trx reset gpio */
+    imx547->gt_trx_reset_gpio = gpiod_get_index_optional(&client->dev, "reset",
+                                0, GPIOD_OUT_HIGH);
+    if (IS_ERR(imx547->gt_trx_reset_gpio)) {
+        if (PTR_ERR(imx547->gt_trx_reset_gpio) != -EPROBE_DEFER)
+            dev_err(&client->dev, "GT TRX Reset GPIO not setup in DT");
+        ret = PTR_ERR(imx547->gt_trx_reset_gpio);
+        goto err_me;
+    }
+
+    /* initialize pipe reset gpio */
+    imx547->pipe_reset_gpio = gpiod_get_index_optional(&client->dev, "reset",
+                              1, GPIOD_OUT_HIGH);
+    if (IS_ERR(imx547->pipe_reset_gpio)) {
+        if (PTR_ERR(imx547->pipe_reset_gpio) != -EPROBE_DEFER)
+            dev_err(&client->dev, "GT TRX Reset GPIO not setup in DT");
+        ret = PTR_ERR(imx547->pipe_reset_gpio);
+        goto err_me;
+    }
+    gpiod_set_value_cansleep(imx547->pipe_reset_gpio, 0);
 
     /* initialize controls */
     ret = v4l2_ctrl_handler_init(&imx547->ctrls.handler, 3);
