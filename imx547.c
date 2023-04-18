@@ -349,9 +349,11 @@ static int imx547_set_pixel_format(struct stimx547 *priv)
 
     switch (priv->format.code) {
         case MEDIA_BUS_FMT_SRGGB10_1X10:
+        case MEDIA_BUS_FMT_Y10_1X10:
             err = imx547_write_table(priv, imx547_10bit_mode);
             break;
         case MEDIA_BUS_FMT_SRGGB12_1X12:
+        case MEDIA_BUS_FMT_Y12_1X12:
             err = imx547_write_table(priv, imx547_12bit_mode);
             break;
         default:
@@ -503,9 +505,11 @@ static int imx547_set_fmt(struct v4l2_subdev *sd,
 
     switch (imx547->format.code) {
         case MEDIA_BUS_FMT_SRGGB10_1X10:
+        case MEDIA_BUS_FMT_Y10_1X10:
             imx547->line_time = IMX547_DEFAULT_LINE_TIME_10BIT;
             break;
         case MEDIA_BUS_FMT_SRGGB12_1X12:
+        case MEDIA_BUS_FMT_Y12_1X12:
             imx547->line_time = IMX547_DEFAULT_LINE_TIME_12BIT;
             break;
         default:
@@ -568,9 +572,11 @@ static int imx547_s_frame_interval(struct v4l2_subdev *sd,
 
         switch (imx547->format.code) {
             case MEDIA_BUS_FMT_SRGGB10_1X10:
+            case MEDIA_BUS_FMT_Y10_1X10:
                 min_reg_shs = IMX547_MIN_SHS_LENGTH_10BIT;
                 break;
             case MEDIA_BUS_FMT_SRGGB12_1X12:
+            case MEDIA_BUS_FMT_Y12_1X12:
                 min_reg_shs = IMX547_MIN_SHS_LENGTH_12BIT;
                 break;
             default:
@@ -756,9 +762,11 @@ static int imx547_set_exposure(struct stimx547 *priv, int val)
     
     switch (priv->format.code) {
         case MEDIA_BUS_FMT_SRGGB10_1X10:
+        case MEDIA_BUS_FMT_Y10_1X10:
             min_reg_shs = IMX547_MIN_SHS_LENGTH_10BIT;
             break;
         case MEDIA_BUS_FMT_SRGGB12_1X12:
+        case MEDIA_BUS_FMT_Y12_1X12:
             min_reg_shs = IMX547_MIN_SHS_LENGTH_12BIT;
             break;
         default:
@@ -907,9 +915,11 @@ static int imx547_set_frame_interval(struct stimx547 *priv)
 
     switch (priv->format.code) {
         case MEDIA_BUS_FMT_SRGGB10_1X10:
+        case MEDIA_BUS_FMT_Y10_1X10:
             max_frame_rate = IMX547_M_FACTOR * IMX547_MAX_FRAME_INTERVAL_10BIT_DENOMINATOR / IMX547_MAX_FRAME_INTERVAL_10BIT_NUMERATOR;
             break;
         case MEDIA_BUS_FMT_SRGGB12_1X12:
+        case MEDIA_BUS_FMT_Y12_1X12:
             max_frame_rate = IMX547_M_FACTOR * IMX547_MAX_FRAME_INTERVAL_12BIT_DENOMINATOR / IMX547_MAX_FRAME_INTERVAL_12BIT_NUMERATOR;
             break;
         default:
@@ -921,10 +931,12 @@ static int imx547_set_frame_interval(struct stimx547 *priv)
     if (req_frame_rate > max_frame_rate) {
         switch (priv->format.code) {
             case MEDIA_BUS_FMT_SRGGB10_1X10:
+            case MEDIA_BUS_FMT_Y10_1X10:
                 priv->frame_interval.numerator = IMX547_MAX_FRAME_INTERVAL_10BIT_NUMERATOR;
                 priv->frame_interval.denominator = IMX547_MAX_FRAME_INTERVAL_10BIT_DENOMINATOR ;
                 break;
             case MEDIA_BUS_FMT_SRGGB12_1X12:
+            case MEDIA_BUS_FMT_Y12_1X12:
                 priv->frame_interval.numerator = IMX547_MAX_FRAME_INTERVAL_12BIT_NUMERATOR;
                 priv->frame_interval.denominator = IMX547_MAX_FRAME_INTERVAL_12BIT_DENOMINATOR ;
                 break;
