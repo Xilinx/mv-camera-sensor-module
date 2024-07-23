@@ -1037,7 +1037,7 @@ static int imx547_probe(struct i2c_client *client)
     }
 
     /* initialize gt trx reset gpio */
-    imx547->gt_trx_reset_gpio = gpiod_get_index_optional(&client->dev, "reset",
+    imx547->gt_trx_reset_gpio = devm_gpiod_get_index_optional(&client->dev, "reset",
                                 0, GPIOD_OUT_HIGH);
     if (IS_ERR(imx547->gt_trx_reset_gpio)) {
         if (PTR_ERR(imx547->gt_trx_reset_gpio) != -EPROBE_DEFER)
@@ -1047,7 +1047,7 @@ static int imx547_probe(struct i2c_client *client)
     }
 
     /* initialize pipe reset gpio */
-    imx547->pipe_reset_gpio = gpiod_get_index_optional(&client->dev, "reset",
+    imx547->pipe_reset_gpio = devm_gpiod_get_index_optional(&client->dev, "reset",
                               1, GPIOD_OUT_HIGH);
     if (IS_ERR(imx547->pipe_reset_gpio)) {
         if (PTR_ERR(imx547->pipe_reset_gpio) != -EPROBE_DEFER)
