@@ -1,0 +1,9 @@
+#  SPDX-License-Identifier: GPL-2+
+#  Copyright (C) 2024, Advanced Micro Devices, Inc.
+
+PACKAGE_NAME="imx547-module"
+PACKAGE_VERSION="0.1"
+AUTOINSTALL="yes"
+BUILT_MODULE_NAME[0]="imx547"
+BUILT_MODULE_LOCATION[0]="."
+DEST_MODULE_LOCATION[0]="/updates/imx547/"
