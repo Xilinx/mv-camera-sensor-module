@@ -526,6 +526,7 @@ static int imx547_set_fmt(struct v4l2_subdev *sd,
 /**
  * imx547_g_frame_interval - Get the frame interval
  * @sd: Pointer to V4L2 Sub device structure
+ * @sd_state: Pointer to V4L2 Sub device state information structure
  * @fi: Pointer to V4l2 Sub device frame interval structure
  *
  * This function is used to get the frame interval.
@@ -533,6 +534,7 @@ static int imx547_set_fmt(struct v4l2_subdev *sd,
  * Return: 0 on success
  */
 static int imx547_g_frame_interval(struct v4l2_subdev *sd,
+                   struct v4l2_subdev_state *sd_state,
                    struct v4l2_subdev_frame_interval *fi)
 {
     struct stimx547 *imx547 = to_imx547(sd);
@@ -546,6 +548,7 @@ static int imx547_g_frame_interval(struct v4l2_subdev *sd,
 /**
  * imx547_s_frame_interval - Set the frame interval
  * @sd: Pointer to V4L2 Sub device structure
+ * @sd_state: Pointer to V4L2 Sub device state information structure
  * @fi: Pointer to V4l2 Sub device frame interval structure
  *
  * This function is used to set the frame interval.
@@ -553,6 +556,7 @@ static int imx547_g_frame_interval(struct v4l2_subdev *sd,
  * Return: 0 on success
  */
 static int imx547_s_frame_interval(struct v4l2_subdev *sd,
+                   struct v4l2_subdev_state *sd_state,
                    struct v4l2_subdev_frame_interval *fi)
 {
     struct stimx547 *imx547 = to_imx547(sd);
@@ -970,11 +974,11 @@ fail:
 static const struct v4l2_subdev_pad_ops imx547_pad_ops = {
     .get_fmt = imx547_get_fmt,
     .set_fmt = imx547_set_fmt,
+    .get_frame_interval = imx547_g_frame_interval,
+    .set_frame_interval = imx547_s_frame_interval,
 };
 
 static const struct v4l2_subdev_video_ops imx547_video_ops = {
-    .g_frame_interval = imx547_g_frame_interval,
-    .s_frame_interval = imx547_s_frame_interval,
     .s_stream = imx547_s_stream,
 };
 
