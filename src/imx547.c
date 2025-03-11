@@ -1160,7 +1160,7 @@ static struct i2c_driver imx547_i2c_driver = {
         .name   = "imx547",
         .of_match_table = imx547_of_match,
     },
-    .probe_new  = imx547_probe,
+    .probe      = imx547_probe,
     .remove     = imx547_remove,
     .id_table   = imx547_id,
 };
