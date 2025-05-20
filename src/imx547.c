@@ -526,6 +526,7 @@ static int imx547_set_fmt(struct v4l2_subdev *sd,
 /**
  * imx547_g_frame_interval - Get the frame interval
  * @sd: Pointer to V4L2 Sub device structure
+ * @sd_state: Pointer to V4L2 Sub device state information structure
  * @fi: Pointer to V4l2 Sub device frame interval structure
  *
  * This function is used to get the frame interval.
@@ -533,6 +534,7 @@ static int imx547_set_fmt(struct v4l2_subdev *sd,
  * Return: 0 on success
  */
 static int imx547_g_frame_interval(struct v4l2_subdev *sd,
+                   struct v4l2_subdev_state *sd_state,
                    struct v4l2_subdev_frame_interval *fi)
 {
     struct stimx547 *imx547 = to_imx547(sd);
@@ -546,6 +548,7 @@ static int imx547_g_frame_interval(struct v4l2_subdev *sd,
 /**
  * imx547_s_frame_interval - Set the frame interval
  * @sd: Pointer to V4L2 Sub device structure
+ * @sd_state: Pointer to V4L2 Sub device state information structure
  * @fi: Pointer to V4l2 Sub device frame interval structure
  *
  * This function is used to set the frame interval.
@@ -553,6 +556,7 @@ static int imx547_g_frame_interval(struct v4l2_subdev *sd,
  * Return: 0 on success
  */
 static int imx547_s_frame_interval(struct v4l2_subdev *sd,
+                   struct v4l2_subdev_state *sd_state,
                    struct v4l2_subdev_frame_interval *fi)
 {
     struct stimx547 *imx547 = to_imx547(sd);
@@ -970,11 +974,11 @@ fail:
 static const struct v4l2_subdev_pad_ops imx547_pad_ops = {
     .get_fmt = imx547_get_fmt,
     .set_fmt = imx547_set_fmt,
+    .get_frame_interval = imx547_g_frame_interval,
+    .set_frame_interval = imx547_s_frame_interval,
 };
 
 static const struct v4l2_subdev_video_ops imx547_video_ops = {
-    .g_frame_interval = imx547_g_frame_interval,
-    .s_frame_interval = imx547_s_frame_interval,
     .s_stream = imx547_s_stream,
 };
 
@@ -1129,7 +1133,7 @@ err_regmap:
     return ret;
 }
 
-static int imx547_remove(struct i2c_client *client)
+static void imx547_remove(struct i2c_client *client)
 {
     struct v4l2_subdev *sd = i2c_get_clientdata(client);
     struct stimx547 *imx547 = to_imx547(sd);
@@ -1141,7 +1145,6 @@ static int imx547_remove(struct i2c_client *client)
     v4l2_ctrl_handler_free(&imx547->ctrls.handler);
     media_entity_cleanup(&sd->entity);
     mutex_destroy(&imx547->lock);
-    return 0;
 }
 
 static const struct i2c_device_id imx547_id[] = {
@@ -1156,7 +1159,7 @@ static struct i2c_driver imx547_i2c_driver = {
         .name   = "imx547",
         .of_match_table = imx547_of_match,
     },
-    .probe_new  = imx547_probe,
+    .probe      = imx547_probe,
     .remove     = imx547_remove,
     .id_table   = imx547_id,
 };

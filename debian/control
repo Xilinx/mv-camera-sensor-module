@@ -1,0 +1,18 @@
+#  SPDX-License-Identifier: GPL-2+
+#  Copyright (C) 2024, Advanced Micro Devices, Inc.
+
+Source: imx547-module
+Section: kernel
+Priority: optional
+Maintainer: Christian Kohn<chris.kohn@amd.com>
+Build-Depends: debhelper-compat (= 13), dkms, dh-dkms
+Standards-Version: 4.6.0
+Homepage: https://github.com/Xilinx/imx547-module
+Rules-Requires-Root: binary-targets
+
+Package: imx547-module
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Camera Control device drivers
+ This package contains the imx547 image sensor driver and
+ uses DKMS to automatically build the kernel modules.
